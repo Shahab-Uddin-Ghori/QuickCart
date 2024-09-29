@@ -34,7 +34,11 @@ function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // Redirect or handle successful login
-      navigate("/");
+      if (email === "adminShahab@quickCard.com") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
 
       toast.success("Logged in Successfull");
     } catch (error) {

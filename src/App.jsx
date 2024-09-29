@@ -1,5 +1,12 @@
-import React from "react";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import React, { useContext } from "react";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import Login from "./utils/Login";
 import Signup from "./utils/Signup";
 import Allproducts from "./Page/UserPages/Allproducts";
@@ -8,13 +15,19 @@ import ProductPurchasedDetails from "./Page/UserPages/ProductPurchasedDetails";
 import UserProfile from "./Page/UserPages/UserProfile";
 import ProductControl from "./Page/Admin/ProductControl";
 import UserControl from "./Page/Admin/UserControl";
-import AdminLayout from "./components/AdminLayout";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import UserLayout from "./components/UserLayout";
 import { ToastContainer } from "react-toast";
+import Orders from "./Page/Admin/Orders";
+import PaymentCheck from "./Page/Admin/PaymentCheck";
+import AdminLayout from "./components/AdminLayout";
+import { UserContext } from "./Context/UserProvider";
 
 function App() {
+  const { profile } = useContext(UserContext);
+  // console.log("🚀 ~ App ~ user:", profile.role);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -28,11 +41,15 @@ function App() {
         <Route
           path="/"
           element={
-            <>
-              <Header />
-              <Outlet />
-              <Footer />
-            </>
+            profile.role === "admin" ? (
+              <Navigate to={`/admin`} />
+            ) : (
+              <>
+                <Header />
+                <Outlet />
+                <Footer />
+              </>
+            )
           }
         >
           <Route path="/" element={<UserLayout />} />
@@ -47,8 +64,10 @@ function App() {
 
         {/* Admin Pages */}
         <Route path="/admin" element={<AdminLayout />}>
-          <Route path="productcontrol" element={<ProductControl />} />
-          <Route path="usercontrol" element={<UserControl />} />
+          <Route path="productControl" element={<ProductControl />} />
+          <Route path="paymentCheck" element={<PaymentCheck />} />
+          <Route path="userControl" element={<UserControl />} />
+          <Route path="orders" element={<Orders />} />
         </Route>
       </Routes>
       <ToastContainer />
