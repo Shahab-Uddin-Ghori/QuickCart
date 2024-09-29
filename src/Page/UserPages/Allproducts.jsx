@@ -10,17 +10,6 @@ function Allproducts() {
     initTWE({ Ripple });
   }, []);
 
-  const handleCagetory = async () => {
-    const categoryUrl = await fetch(
-      `https://dummyjson.com/products/category-list`
-    );
-    const category = await categoryUrl.json();
-    console.log("🚀 ~ handleCagetory ~ category:", category);
-  };
-  useEffect(() => {
-    handleCagetory();
-  }, []);
-
   return (
     <div className="ProductSec flex flex-col">
       {/* cards */}

@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { db, storage } from "../../utils/firebase"; // Make sure 'storage' is imported
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import the necessary functions
+import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
+import { FaUserCircle } from "react-icons/fa";
 
 function ProductControl() {
   const [formData, setFormData] = useState({
@@ -27,23 +31,38 @@ function ProductControl() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
-    // Upload logic here (Firebase Storage and Firestore)
-    console.log("Form submitted:", formData, imageFile);
-    // After upload, reset the form and uploading state
-    setUploading(false);
-    setFormData({
-      title: "",
-      brand: "",
-      category: "",
-      price: "",
-      stock: "",
-      discount: "",
-      imageUrl: "",
-    });
-    setImageFile(null);
+    try {
+      // Upload image to Firebase Storage
+      const storageRef = ref(storage, `ads/${imageFile.name}`);
+      await uploadBytes(storageRef, imageFile);
+      const imageUrl = await getDownloadURL(storageRef);
+
+      // Use addDoc to add product data to Firestore
+      await addDoc(collection(db, "ads"), {
+        ...formData,
+        imageUrl: imageUrl, // Add the image URL to the document
+      });
+
+      console.log("Product uploaded successfully!");
+      // Reset form
+      setFormData({
+        title: "",
+        brand: "",
+        category: "",
+        price: "",
+        stock: "",
+        discount: "",
+        imageUrl: "",
+      });
+      setImageFile(null);
+    } catch (error) {
+      console.error("Error uploading product:", error);
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -56,11 +75,15 @@ function ProductControl() {
         {/* Product Image Section */}
         <div className="flex justify-center mb-4">
           <label className="relative cursor-pointer">
-            <img
-              src={formData.imageUrl || "placeholder.jpg"}
-              alt="Product"
-              className="h-32 w-32 rounded border border-gray-300 object-cover"
-            />
+            {formData.imageUrl ? (
+              <img
+                src={formData.imageUrl}
+                alt="Product"
+                className="h-32 w-32 rounded border border-gray-300 object-cover"
+              />
+            ) : (
+              <FaUserCircle size={64} />
+            )}
             <input
               type="file"
               accept="image/*"
