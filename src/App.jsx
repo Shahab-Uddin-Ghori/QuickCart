@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Login from "./utils/Login";
 import Signup from "./utils/Signup";
 import Allproducts from "./Page/UserPages/Allproducts";
@@ -12,45 +12,48 @@ import AdminLayout from "./components/AdminLayout";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import UserLayout from "./components/UserLayout";
+import { ToastContainer } from "react-toast";
 
 function App() {
-  return;
-  <BrowserRouter>
-    {/* utils */}
-    <Routes>
-      <Route path="/Login" element={<Login />} />
-      <Route path="/Signup" element={<Signup />} />
-    </Routes>
-    {/*  */}
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Auth Pages */}
+        <Route path="/auth" element={<Outlet />}>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+        </Route>
 
-    {/* user */}
-    <Routes>
-      <Route path="/Allproducts" element={<Allproducts />} />
-      <Route path="/ItemCart" element={<ItemCart />} />
-      <Route
-        path="/ProductPurchasedDetails"
-        element={<ProductPurchasedDetails />}
-      />
-      <Route path="/UserProfile" element={<UserProfile />} />
-    </Routes>
-    {/*  */}
+        {/* User Pages */}
+        <Route
+          path="/"
+          element={
+            <>
+              <Header />
+              <Outlet />
+              <Footer />
+            </>
+          }
+        >
+          <Route path="/" element={<UserLayout />} />
+          <Route path="allproducts" element={<Allproducts />} />
+          <Route path="itemcart" element={<ItemCart />} />
+          <Route
+            path="productpurchaseddetails"
+            element={<ProductPurchasedDetails />}
+          />
+          <Route path="userprofile" element={<UserProfile />} />
+        </Route>
 
-    {/* Admin */}
-    <Routes>
-      <Route path="/ProductControl" element={<ProductControl />} />
-      <Route path="/UserControl" element={<UserControl />} />
-    </Routes>
-    {/*  */}
-
-    {/* Components */}
-    <Routes>
-      <Route path="/AdminLayout" element={<AdminLayout />} />
-      <Route path="/UserLayout" element={<UserLayout />} />
-      <Route path="/Header" element={<Header />} />
-      <Route path="/Footer" element={<Footer />} />
-    </Routes>
-    {/*  */}
-  </BrowserRouter>;
+        {/* Admin Pages */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="productcontrol" element={<ProductControl />} />
+          <Route path="usercontrol" element={<UserControl />} />
+        </Route>
+      </Routes>
+      <ToastContainer />
+    </BrowserRouter>
+  );
 }
 
 export default App;
