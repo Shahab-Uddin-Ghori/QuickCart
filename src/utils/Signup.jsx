@@ -18,6 +18,7 @@ function Signup() {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,44 +49,50 @@ function Signup() {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-    } else {
-      try {
-        // Handle the signup logic
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          formData.email,
-          formData.password
-        );
-        const { user: newUser } = userCredential;
-
-        // Save additional user data to Firestore
-        await setDoc(doc(db, "users", newUser.uid), {
-          name: formData.name,
-          contact: formData.contact,
-          email: formData.email,
-          profilePicture: "", // Default value for profile picture
-          // Add any other default fields here
-        });
-
-        // Update context with new profile data
-        updateProfile({
-          name: formData.name,
-          contact: formData.contact,
-          email: formData.email,
-          profilePicture: "", // Set the default profile picture
-        });
-
-        // Reset form
-        setFormData({ name: "", contact: "", email: "", password: "" });
-        setErrors({});
-        toast.success("Signup Successfull");
-      } catch (error) {
-        console.error("Error signing up:", error);
-        toast.error(error.message);
-        setErrors({ general: "Error signing up. Please try again." });
-      }
+      return; // Stop if there are validation errors
     }
-    navigate("/");
+
+    setLoading(true); // Start loading state
+    try {
+      // Handle the signup logic
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const { user: newUser } = userCredential;
+
+      // Save additional user data to Firestore
+      await setDoc(doc(db, "users", newUser.uid), {
+        name: formData.name,
+        contact: formData.contact,
+        email: formData.email,
+        profilePicture: "", // Default value for profile picture
+        // Add any other default fields here
+      });
+
+      // Update context with new profile data
+      updateProfile({
+        name: formData.name,
+        contact: formData.contact,
+        email: formData.email,
+        profilePicture: "", // Set the default profile picture
+      });
+
+      // Reset form and errors
+      setFormData({ name: "", contact: "", email: "", password: "" });
+      setErrors({});
+      toast.success("Signup Successful");
+
+      // Redirect after successful signup
+      navigate("/");
+    } catch (error) {
+      console.error("Error signing up:", error);
+      toast.error(error.message);
+      setErrors({ general: "Error signing up. Please try again." });
+    } finally {
+      setLoading(false); // End loading state
+    }
   };
 
   return (
@@ -238,9 +245,12 @@ function Signup() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300"
+                className={`w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300 ${
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={loading} // Disable the button while loading
               >
-                Sign Up
+                {loading ? "Signing Up..." : "Sign Up"}
               </button>
 
               {/* Error Message */}

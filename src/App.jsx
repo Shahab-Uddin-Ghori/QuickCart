@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import "./App.css";
 import {
   BrowserRouter,
   Navigate,
@@ -56,7 +57,7 @@ function App() {
           <Route path="allproducts" element={<Allproducts />} />
           <Route path="itemcart" element={<ItemCart />} />
           <Route
-            path="productpurchaseddetails"
+            path="productpurchaseddetails/:productId"
             element={<ProductPurchasedDetails />}
           />
           <Route path="userprofile" element={<UserProfile />} />

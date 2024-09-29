@@ -1,56 +1,179 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// Initialization for ES Users
-import { Ripple, initTWE } from "tw-elements";
+import { useAds } from "../../Context/AdProvider"; // Use the custom hook here
+import { ClipLoader } from "react-spinners"; // Import ClipLoader
 
 function Allproducts() {
-  const [cards, setCards] = useState();
+  const { ads, brands, loading, error } = useAds(); // Use the custom hook
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [priceRange, setPriceRange] = useState([0, 10000000]); // Added price range state
   const navigate = useNavigate();
+
   useEffect(() => {
-    initTWE({ Ripple });
-  }, []);
+    // Filter ads whenever selectedBrand, searchTerm, selectedCategory, or priceRange changes
+    const filtered = ads.filter((ad) => {
+      const matchesBrand = selectedBrand ? ad.brand === selectedBrand : true;
+      const matchesSearchTerm = ad.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" || ad.category === selectedCategory;
+      const matchesPrice =
+        ad.price >= priceRange[0] && ad.price <= priceRange[1];
+
+      return (
+        matchesBrand && matchesSearchTerm && matchesCategory && matchesPrice
+      );
+    });
+    setFilteredProducts(filtered);
+  }, [selectedBrand, searchTerm, ads, selectedCategory, priceRange]);
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader color="#1aafc2" />
+      </div>
+    );
+  if (error) return <p>Error: {error}</p>;
+
+  // Categories to be displayed as buttons
+  const categories = [...new Set(ads.map((ad) => ad.category))]; // Extract unique categories
 
   return (
-    <div className="ProductSec flex flex-col">
-      {/* cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4 ">
-        {/* container card div  */}
-        <div className="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark shadow-gray-400 shadow-sm">
-          <div
-            className="relative overflow-hidden bg-cover bg-no-repeat h-32 " // Adjusted height
-            data-twe-ripple-init=""
-            data-twe-ripple-color="light"
+    <div className="flex flex-col">
+      <div className="flex justify-between p-4 items-center">
+        <input
+          type="text"
+          placeholder="Search products..."
+          className="border p-2 rounded w-1/3"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        {/* Central heading */}
+        <div className="flex items-center justify-center w-1/3">
+          <h1 className="text-2xl font-bold text-blue-600 uppercase tracking-wide">
+            Explore Products
+          </h1>
+        </div>
+
+        <button
+          onClick={() => {
+            setSelectedBrand(null);
+            setPriceRange([0, 10000]); // Reset price filter on clear
+          }}
+          className="text-white rounded px-4 py-2"
+          style={{ backgroundColor: "#45B6FF" }} // Updated color
+        >
+          Clear Filter
+        </button>
+      </div>
+
+      <div className="flex justify-start p-4 space-x-2">
+        <button
+          onClick={() => setSelectedCategory("All")}
+          className="bg-gray-200 rounded px-4 py-2"
+        >
+          All Categories
+        </button>
+        {categories.map((category, index) => (
+          <button
+            key={index}
+            onClick={() => setSelectedCategory(category)}
+            className="bg-gray-200 rounded px-4 py-2"
           >
-            <img
-              className="w-full h-full object-cover rounded-t-lg hover:scale-105 transition ease-in-out duration-500 hover:cursor-pointer "
-              src="https://tecdn.b-cdn.net/img/new/standard/nature/186.jpg"
-              alt=""
-            />
-          </div>
-          <div className="p-4 text-surface dark:text-white">
-            {" "}
-            {/* Reduced padding */}
-            <h5 className="mb-1 text-lg font-medium leading-tight">
-              Card title
-            </h5>{" "}
-            {/* Reduced text size */}
-            <p className="mb-2 text-sm">
-              {" "}
-              {/* Reduced text size */}
-              Some quick example text to build on the card title.
-            </p>
+            {category}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex flex-1">
+        {/* Sidebar for brand and price filters */}
+        <aside className="w-1/5 bg-gray-100 p-4 rounded-lg shadow-md h-full">
+          <h2 className="font-bold text-lg mb-4">Filter by Brand</h2>
+          <select
+            value={selectedBrand || ""}
+            onChange={(e) => setSelectedBrand(e.target.value)}
+            className="border p-2 rounded w-full mb-4"
+          >
+            <option value="">Select a brand</option>
+            {brands.map((brand, index) => (
+              <option key={index} value={brand}>
+                {brand}
+              </option>
+            ))}
+          </select>
+
+          {/* Filter by Price Range */}
+          <div className="mt-4">
+            <h2 className="font-bold text-lg mb-2">Filter by Price</h2>
+            <div className="flex space-x-2 mb-2">
+              <input
+                type="number"
+                placeholder="Min"
+                value={priceRange[0]}
+                onChange={(e) =>
+                  setPriceRange([Number(e.target.value), priceRange[1]])
+                }
+                className="border p-2 rounded w-1/2"
+              />
+              <input
+                type="number"
+                placeholder="Max"
+                value={priceRange[1]}
+                onChange={(e) =>
+                  setPriceRange([priceRange[0], Number(e.target.value)])
+                }
+                className="border p-2 rounded w-1/2"
+              />
+            </div>
             <button
-              onClick={() => navigate("/ProductPurchasedDetails")}
-              type="button"
-              className="inline-block rounded bg-primary px-4 py-1 text-xs font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300   bg-sky-600 focus:outline-none"
-              data-twe-ripple-init=""
-              data-twe-ripple-color="light"
+              onClick={() => setPriceRange([0, 100000000])} // Reset button for price range
+              className="text-white rounded px-4 py-2 w-full"
+              style={{ backgroundColor: "#45B6FF" }} // Updated color
             >
-              Button
+              Reset Price Filter
             </button>
           </div>
+        </aside>
+
+        {/* Main product section */}
+        <div className="flex-1 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105"
+            >
+              <div className="relative h-40 overflow-hidden rounded-t-lg">
+                <img
+                  src={product.imageUrl}
+                  alt={product.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h5 className="mb-2 text-lg font-semibold">{product.title}</h5>
+                <p className="mb-2 text-gray-600">{product.description}</p>
+                <p className="mb-2 text-gray-800 font-bold">
+                  Rs. {product.price}
+                </p>{" "}
+                {/* Changed to Rs. */}
+                <button
+                  onClick={() =>
+                    navigate(`/ProductPurchasedDetails/${product.id}`)
+                  }
+                  className="mt-2 w-full py-2 text-white rounded-lg transition duration-300 hover:bg-blue-700"
+                  style={{ backgroundColor: "#45B6FF" }} // Updated color
+                >
+                  View Details
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-        {/* Repeat the above block for additional cards */}
       </div>
     </div>
   );

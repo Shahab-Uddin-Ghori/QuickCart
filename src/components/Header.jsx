@@ -81,15 +81,6 @@ function Header() {
                 </Link>
               </li>
               {/* Filter */}
-              <li className="mb-4 lg:mb-0 lg:pe-2" data-twe-nav-item-ref="">
-                <Link
-                  className="text-zinc-600 transition font-bold  duration-200 hover:text-zinc-950 motion-reduce:transition-none   lg:px-2"
-                  href="#"
-                  data-twe-nav-link-ref=""
-                >
-                  Filter
-                </Link>
-              </li>
             </ul>
             {/* Left links */}
           </div>
