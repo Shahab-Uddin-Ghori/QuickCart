@@ -144,7 +144,7 @@ function Allproducts() {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-lg shadow-lg hover:scale-[1.02] transition ease-linear duration-300"
+              className="bg-white flex flex-col justify-between rounded-lg shadow-lg hover:scale-[1.02] transition ease-linear duration-300"
             >
               <div className="relative h-40 overflow-hidden rounded-t-lg">
                 <img
