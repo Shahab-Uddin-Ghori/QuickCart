@@ -55,7 +55,7 @@ function Allproducts() {
 
         {/* Central heading */}
         <div className="flex items-center justify-center w-1/3">
-          <h1 className="text-2xl font-bold text-blue-600 uppercase tracking-wide">
+          <h1 className="text-2xl font-bold text-sky-600 uppercase tracking-wide">
             Explore Products
           </h1>
         </div>
@@ -63,7 +63,7 @@ function Allproducts() {
         <button
           onClick={() => {
             setSelectedBrand(null);
-            setPriceRange([0, 10000]); // Reset price filter on clear
+            setPriceRange([0, 100000000]); // Reset price filter on clear
           }}
           className="text-white rounded px-4 py-2"
           style={{ backgroundColor: "#45B6FF" }} // Updated color
@@ -132,8 +132,7 @@ function Allproducts() {
             </div>
             <button
               onClick={() => setPriceRange([0, 100000000])} // Reset button for price range
-              className="text-white rounded px-4 py-2 w-full"
-              style={{ backgroundColor: "#45B6FF" }} // Updated color
+              className="text-white rounded px-4 py-2 w-full bg-sky-600"
             >
               Reset Price Filter
             </button>
@@ -145,18 +144,17 @@ function Allproducts() {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105"
+              className="bg-white rounded-lg shadow-lg hover:scale-[1.02] transition ease-linear duration-300"
             >
               <div className="relative h-40 overflow-hidden rounded-t-lg">
                 <img
                   src={product.imageUrl}
                   alt={product.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain overflow-hidden transition-transform transform hover:scale-105"
                 />
               </div>
               <div className="p-4">
                 <h5 className="mb-2 text-lg font-semibold">{product.title}</h5>
-                <p className="mb-2 text-gray-600">{product.description}</p>
                 <p className="mb-2 text-gray-800 font-bold">
                   Rs. {product.price}
                 </p>{" "}
@@ -165,8 +163,7 @@ function Allproducts() {
                   onClick={() =>
                     navigate(`/ProductPurchasedDetails/${product.id}`)
                   }
-                  className="mt-2 w-full py-2 text-white rounded-lg transition duration-300 hover:bg-blue-700"
-                  style={{ backgroundColor: "#45B6FF" }} // Updated color
+                  className="mt-2 w-full py-2 text-white rounded-lg transition duration-300  bg-sky-600"
                 >
                   View Details
                 </button>

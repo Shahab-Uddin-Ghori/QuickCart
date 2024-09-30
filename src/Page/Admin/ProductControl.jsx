@@ -12,6 +12,7 @@ function ProductControl() {
     price: "",
     stock: "",
     discount: "",
+    description: "", // Add description field
     imageUrl: "",
   });
 
@@ -55,6 +56,7 @@ function ProductControl() {
         price: "",
         stock: "",
         discount: "",
+        description: "", // Reset description
         imageUrl: "",
       });
       setImageFile(null);
@@ -207,6 +209,26 @@ function ProductControl() {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
+          </div>
+
+          {/* Description Field */}
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Description
+            </label>
+            <textarea
+              name="description"
+              id="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Enter product description"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              rows={4}
+              required
+            />
           </div>
 
           <div className="flex items-center justify-between">

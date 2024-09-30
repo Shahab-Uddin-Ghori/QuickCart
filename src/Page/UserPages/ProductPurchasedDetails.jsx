@@ -41,7 +41,7 @@ function ProductPurchasedDetails() {
           <div className="md:flex-1 px-4">
             <div className="h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
               <img
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 src={product.imageUrl || "https://via.placeholder.com/400"}
                 alt={product.title}
               />
@@ -63,16 +63,14 @@ function ProductPurchasedDetails() {
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
               {product.title || "Product Name"}
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-              {product.description || "Product description goes here."}
-            </p>
+
             <div className="flex mb-4">
               <div className="mr-4">
                 <span className="font-bold text-gray-700 dark:text-gray-300">
                   Price:
                 </span>
                 <span className="text-gray-600 dark:text-gray-300">
-                  Rs. {product.price || "0"}
+                  &nbsp; Rs. {product.price || "0"}
                 </span>
               </div>
               <div>
@@ -84,6 +82,26 @@ function ProductPurchasedDetails() {
                 </span>
               </div>
             </div>
+            {/*  */}
+            <div className="mr-4">
+              <span className="font-bold text-gray-700 dark:text-gray-300">
+                Category:
+              </span>
+              <span className="text-gray-600 dark:text-gray-300">
+                &nbsp; {product.category || "0"}
+              </span>
+            </div>
+            {/*  */}
+            {/*  */}
+            <div className="mr-4 my-2">
+              <span className="font-bold text-gray-700 dark:text-gray-300">
+                Brand:
+              </span>
+              <span className="text-gray-600 dark:text-gray-300">
+                &nbsp; {product.brand || "0"}
+              </span>
+            </div>
+            {/*  */}
             <div className="mb-4">
               <span className="font-bold text-gray-700 dark:text-gray-300">
                 Select Color:
@@ -118,7 +136,7 @@ function ProductPurchasedDetails() {
                 Product Description:
               </span>
               <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
-                {product.longDescription ||
+                {product.description ||
                   "Detailed product description goes here."}
               </p>
             </div>
