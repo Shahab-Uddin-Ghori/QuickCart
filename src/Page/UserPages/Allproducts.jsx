@@ -160,9 +160,7 @@ function Allproducts() {
                 </p>{" "}
                 {/* Changed to Rs. */}
                 <button
-                  onClick={() =>
-                    navigate(`/ProductPurchasedDetails/${product.id}`)
-                  }
+                  onClick={() => navigate(`/ProductDetails/${product.id}`)}
                   className="mt-2 w-full py-2 text-white rounded-lg transition duration-300  bg-sky-600"
                 >
                   View Details
