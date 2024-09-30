@@ -12,7 +12,6 @@ import Login from "./utils/Login";
 import Signup from "./utils/Signup";
 import Allproducts from "./Page/UserPages/Allproducts";
 import ItemCart from "./Page/UserPages/ItemCart";
-import ProductPurchasedDetails from "./Page/UserPages/ProductPurchasedDetails";
 import UserProfile from "./Page/UserPages/UserProfile";
 import ProductControl from "./Page/Admin/ProductControl";
 import UserControl from "./Page/Admin/UserControl";
@@ -24,6 +23,7 @@ import Orders from "./Page/Admin/Orders";
 import PaymentCheck from "./Page/Admin/PaymentCheck";
 import AdminLayout from "./components/AdminLayout";
 import { UserContext } from "./Context/UserProvider";
+import ProductDetails from "./Page/UserPages/ProductDetails";
 
 function App() {
   const { profile } = useContext(UserContext);
@@ -57,8 +57,8 @@ function App() {
           <Route path="allproducts" element={<Allproducts />} />
           <Route path="itemcart" element={<ItemCart />} />
           <Route
-            path="productpurchaseddetails/:productId"
-            element={<ProductPurchasedDetails />}
+            path="ProductDetails/:productId"
+            element={<ProductDetails />}
           />
           <Route path="userprofile" element={<UserProfile />} />
         </Route>

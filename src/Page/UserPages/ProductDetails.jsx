@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"; // Correct useParams import
 import { useAds } from "../../Context/AdProvider"; // Use the custom AdProvider context
 import { ClipLoader } from "react-spinners"; // For loading spinner
 
-function ProductPurchasedDetails() {
+function ProductDetails() {
   const { productId } = useParams(); // Extract productId from URL
   const { ads, loading, error } = useAds(); // Fetch ads from the context
   const [product, setProduct] = useState(null);
@@ -39,7 +39,7 @@ function ProductPurchasedDetails() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row -mx-4">
           <div className="md:flex-1 px-4">
-            <div className="h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+            <div className="h-[460px] rounded-lg  mb-4">
               <img
                 className="w-full h-full object-contain"
                 src={product.imageUrl || "https://via.placeholder.com/400"}
@@ -147,4 +147,4 @@ function ProductPurchasedDetails() {
   );
 }
 
-export default ProductPurchasedDetails;
+export default ProductDetails;
