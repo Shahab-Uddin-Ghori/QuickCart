@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTrash, FaPlus, FaMinus } from "react-icons/fa";
+import AOS from "aos"; // Import AOS
+import "aos/dist/aos.css"; // Import AOS styles
 
 const ItemCart = () => {
   // Sample data for demonstration purposes
@@ -28,6 +30,11 @@ const ItemCart = () => {
   ];
 
   const [cartItems, setCartItems] = useState(initialCartItems);
+
+  // Initialize AOS
+  useEffect(() => {
+    AOS.init({ duration: 500 }); // Optional: Set duration for animations
+  }, []);
 
   const handleIncrement = (id) => {
     setCartItems((prevItems) =>
@@ -70,6 +77,7 @@ const ItemCart = () => {
           <div
             key={item.id}
             className="flex items-center justify-between mb-4 p-4 border rounded-lg shadow hover:shadow-lg transition-shadow duration-200"
+            data-aos="fade-up" // AOS animation
           >
             <img
               src={item.image}

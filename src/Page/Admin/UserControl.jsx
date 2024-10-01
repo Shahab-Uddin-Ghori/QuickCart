@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../../Context/UserProvider";
 
 function UserControl() {
+  const { user } = useContext(UserContext);
   const [usersData, setUsersData] = useState([
     {
       id: 1,
