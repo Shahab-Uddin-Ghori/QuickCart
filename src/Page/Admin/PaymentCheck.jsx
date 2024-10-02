@@ -67,43 +67,49 @@ function PaymentCheck() {
         Below is the list of all payment transactions. Click on a user for more
         details.
       </p>
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2 border-b-2 text-left">User</th>
-            <th className="px-4 py-2 border-b-2 text-left">Product</th>
-            <th className="px-4 py-2 border-b-2 text-left">Amount</th>
-            <th className="px-4 py-2 border-b-2 text-left">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((transaction) => (
-            <tr
-              key={transaction.id}
-              className="hover:bg-gray-100 transition-colors duration-200"
-            >
-              <td className="border-b px-4 py-2 flex items-center">
-                <img
-                  src={transaction.user.pic}
-                  alt={transaction.user.name}
-                  className="rounded-full mr-2"
-                />
-                <div>
-                  <div className="font-semibold">{transaction.user.name}</div>
-                  <div className="text-sm text-gray-500">
-                    {transaction.user.contact}
-                  </div>
-                </div>
-              </td>
-              <td className="border-b px-4 py-2">{transaction.product.name}</td>
-              <td className="border-b px-4 py-2 font-semibold text-green-600">
-                ${transaction.product.amount.toFixed(2)}
-              </td>
-              <td className="border-b px-4 py-2">{transaction.date}</td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="px-4 py-2 border-b-2 text-left">User</th>
+              <th className="px-4 py-2 border-b-2 text-left">Product</th>
+              <th className="px-4 py-2 border-b-2 text-left">Amount</th>
+              <th className="px-4 py-2 border-b-2 text-left">Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {transactions.map((transaction) => (
+              <tr
+                key={transaction.id}
+                className="hover:bg-gray-100 transition-colors duration-200"
+              >
+                <td className="border-b px-4 py-2 flex items-center space-x-2">
+                  <img
+                    src={transaction.user.pic}
+                    alt={transaction.user.name}
+                    className="rounded-full w-10 h-10 object-cover"
+                  />
+                  <div className="overflow-hidden">
+                    <div className="font-semibold truncate">
+                      {transaction.user.name}
+                    </div>
+                    <div className="text-sm text-gray-500 truncate">
+                      {transaction.user.contact}
+                    </div>
+                  </div>
+                </td>
+                <td className="border-b px-4 py-2 truncate">
+                  {transaction.product.name}
+                </td>
+                <td className="border-b px-4 py-2 font-semibold text-green-600">
+                  ${transaction.product.amount.toFixed(2)}
+                </td>
+                <td className="border-b px-4 py-2">{transaction.date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

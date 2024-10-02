@@ -60,63 +60,67 @@ function Orders() {
         Below is the list of all orders. You can accept or reject orders based
         on the details.
       </p>
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2 border-b-2 text-left">User</th>
-            <th className="px-4 py-2 border-b-2 text-left">Products</th>
-            <th className="px-4 py-2 border-b-2 text-left">Total Price</th>
-            <th className="px-4 py-2 border-b-2 text-left">Date</th>
-            <th className="px-4 py-2 border-b-2 text-left">Status</th>
-            <th className="px-4 py-2 border-b-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr
-              key={order.id}
-              className="hover:bg-gray-100 transition-colors duration-200"
-            >
-              <td className="border-b px-4 py-2">
-                <div className="font-semibold">{order.user.name}</div>
-                <div className="text-sm text-gray-500">{order.user.email}</div>
-              </td>
-              <td className="border-b px-4 py-2">
-                {order.products.map((product, index) => (
-                  <div key={index}>
-                    {product.name} (x{product.quantity})
-                  </div>
-                ))}
-              </td>
-              <td className="border-b px-4 py-2 font-semibold text-green-600">
-                ${order.total.toFixed(2)}
-              </td>
-              <td className="border-b px-4 py-2">{order.date}</td>
-              <td className="border-b px-4 py-2">{order.status}</td>
-              <td className="border-b px-4 py-2 text-center">
-                {order.status === "Pending" ? (
-                  <>
-                    <button
-                      className="text-green-500 hover:underline mr-2"
-                      onClick={() => handleAccept(order.id)}
-                    >
-                      Accept
-                    </button>
-                    <button
-                      className="text-red-500 hover:underline"
-                      onClick={() => handleReject(order.id)}
-                    >
-                      Reject
-                    </button>
-                  </>
-                ) : (
-                  <span className="text-gray-500">N/A</span>
-                )}
-              </td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="px-4 py-2 border-b-2 text-left">User</th>
+              <th className="px-4 py-2 border-b-2 text-left">Products</th>
+              <th className="px-4 py-2 border-b-2 text-left">Total Price</th>
+              <th className="px-4 py-2 border-b-2 text-left">Date</th>
+              <th className="px-4 py-2 border-b-2 text-left">Status</th>
+              <th className="px-4 py-2 border-b-2 text-center">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr
+                key={order.id}
+                className="hover:bg-gray-100 transition-colors duration-200"
+              >
+                <td className="border-b px-4 py-2">
+                  <div className="font-semibold">{order.user.name}</div>
+                  <div className="text-sm text-gray-500">
+                    {order.user.email}
+                  </div>
+                </td>
+                <td className="border-b px-4 py-2">
+                  {order.products.map((product, index) => (
+                    <div key={index}>
+                      {product.name} (x{product.quantity})
+                    </div>
+                  ))}
+                </td>
+                <td className="border-b px-4 py-2 font-semibold text-green-600">
+                  ${order.total.toFixed(2)}
+                </td>
+                <td className="border-b px-4 py-2">{order.date}</td>
+                <td className="border-b px-4 py-2">{order.status}</td>
+                <td className="border-b px-4 py-2 text-center">
+                  {order.status === "Pending" ? (
+                    <>
+                      <button
+                        className="text-green-500 hover:underline mr-2"
+                        onClick={() => handleAccept(order.id)}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="text-red-500 hover:underline"
+                        onClick={() => handleReject(order.id)}
+                      >
+                        Reject
+                      </button>
+                    </>
+                  ) : (
+                    <span className="text-gray-500">N/A</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
