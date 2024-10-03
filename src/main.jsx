@@ -5,6 +5,7 @@ import "./index.css";
 // import ModeThemeContext from "./Context/ModeThemeContext.jsx"; // Importing ModeThemeContext
 import { UserProvider } from "./Context/UserProvider.jsx"; // Importing UserProvider
 import { AdProvider } from "./Context/AdProvider.jsx";
+import { CartProvider } from "./Context/CartProvider.jsx";
 
 // Rendering the application
 createRoot(document.getElementById("root")).render(
@@ -12,7 +13,9 @@ createRoot(document.getElementById("root")).render(
     {/* <ModeThemeContext> */}
     <UserProvider>
       <AdProvider>
-        <App />
+        <CartProvider>
+          <App />
+        </CartProvider>
       </AdProvider>
     </UserProvider>
     {/* </ModeThemeContext> */}
