@@ -87,7 +87,7 @@ function UserLayout() {
         </p>
 
         <button
-          className="mt-8 bg-gray-700 text-white text-lg md:text-xl px-8 py-4 rounded-lg shadow-lg hover:drop-shadow-2xl shadow-md transition-transform duration-300 transform hover:scale-110 z-10"
+          className="mt-8 bg-gray-700 text-white text-lg md:text-xl px-8 py-4 rounded-lg shadow-lg hover:drop-shadow-2xl transition-transform duration-300 transform hover:scale-110 z-10"
           onClick={() => navigate("/Allproducts")}
         >
           Shop Now

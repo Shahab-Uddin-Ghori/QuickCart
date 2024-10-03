@@ -64,7 +64,12 @@ function App() {
         </Route>
 
         {/* Admin Pages */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            profile.role === "admin" ? <AdminLayout /> : <Navigate to={`/`} />
+          }
+        >
           <Route path="productControl" element={<ProductControl />} />
           <Route path="paymentCheck" element={<PaymentCheck />} />
           <Route path="userControl" element={<UserControl />} />
