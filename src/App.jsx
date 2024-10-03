@@ -24,7 +24,6 @@ import PaymentCheck from "./Page/Admin/PaymentCheck";
 import AdminLayout from "./components/AdminLayout";
 import { UserContext } from "./Context/UserProvider";
 import ProductDetails from "./Page/UserPages/ProductDetails";
-import PageNotFound from "./components/PageNotFound";
 
 function App() {
   const { profile } = useContext(UserContext);
@@ -40,7 +39,20 @@ function App() {
         </Route>
 
         {/* User Pages */}
-        <Route path="/" element={<Outlet />}>
+        <Route
+          path="/"
+          element={
+            profile.role === "admin" ? (
+              <Navigate to={`/admin`} />
+            ) : (
+              <>
+                <Header />
+                <Outlet />
+                <Footer />
+              </>
+            )
+          }
+        >
           <Route path="/" element={<UserLayout />} />
           <Route path="allproducts" element={<Allproducts />} />
           <Route path="itemcart" element={<ItemCart />} />
@@ -52,19 +64,12 @@ function App() {
         </Route>
 
         {/* Admin Pages */}
-
-        <Route
-          path="/admin"
-          element={
-            profile.role === "admin" ? <Outlet /> : <Navigate to={`/`} />
-          }
-        >
+        <Route path="/admin" element={<AdminLayout />}>
           <Route path="productControl" element={<ProductControl />} />
           <Route path="paymentCheck" element={<PaymentCheck />} />
           <Route path="userControl" element={<UserControl />} />
           <Route path="orders" element={<Orders />} />
         </Route>
-        <Route path="/*" element={<PageNotFound />} />
       </Routes>
       <ToastContainer />
     </BrowserRouter>
