@@ -56,12 +56,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            profile.role === "admin" &&
-            profile.email === "adminShahab@quickCard.com" ? (
-              <Outlet />
-            ) : (
-              <Navigate to={`/`} />
-            )
+            profile.role === "admin" ? <Outlet /> : <Navigate to={`/`} />
           }
         >
           <Route path="productControl" element={<ProductControl />} />
