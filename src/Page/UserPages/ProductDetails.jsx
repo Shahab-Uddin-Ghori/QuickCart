@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom"; // Correct useParams import
 import { useAds } from "../../Context/AdProvider"; // Use the custom AdProvider context
 import { ClipLoader } from "react-spinners"; // For loading spinner
+import { CartContext } from "../../Context/CartContextProvider";
 
 function ProductDetails() {
   const { productId } = useParams(); // Extract productId from URL
   const { ads, loading, error } = useAds(); // Fetch ads from the context
   const [product, setProduct] = useState(null);
+  const { addItemToCart, isItemAdded } = useContext(CartContext);
 
   useEffect(() => {
     // Find the product from the context ads based on the productId
@@ -48,8 +50,15 @@ function ProductDetails() {
             </div>
             <div className="flex -mx-2 mb-4">
               <div className="w-1/2 px-2">
-                <button className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
-                  Add to Cart
+                <button
+                  onClick={() => {
+                    addItemToCart(product);
+                  }}
+                  className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700"
+                >
+                  {isItemAdded(product.id)
+                    ? `Added ${isItemAdded(product.id).quantity}`
+                    : `Add to Cart`}
                 </button>
               </div>
               <div className="w-1/2 px-2">

@@ -10,7 +10,6 @@ import {
 } from "react-router-dom";
 import Login from "./utils/Login";
 import Signup from "./utils/Signup";
-import Allproducts from "./Page/UserPages/Allproducts";
 import ItemCart from "./Page/UserPages/ItemCart";
 import UserProfile from "./Page/UserPages/UserProfile";
 import ProductControl from "./Page/Admin/ProductControl";
@@ -24,6 +23,7 @@ import PaymentCheck from "./Page/Admin/PaymentCheck";
 import AdminLayout from "./components/AdminLayout";
 import { UserContext } from "./Context/UserProvider";
 import ProductDetails from "./Page/UserPages/ProductDetails";
+import Products from "./Page/UserPages/Products";
 
 function App() {
   const { profile } = useContext(UserContext);
@@ -54,7 +54,7 @@ function App() {
           }
         >
           <Route path="/" element={<UserLayout />} />
-          <Route path="products" element={<Allproducts />} />
+          <Route path="products" element={<Products />} />
           <Route path="itemcart" element={<ItemCart />} />
           <Route path="products/:productId" element={<ProductDetails />} />
           <Route path="userprofile" element={<UserProfile />} />

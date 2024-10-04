@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAds } from "../../Context/AdProvider"; // Use the custom hook here
 import { ClipLoader } from "react-spinners"; // Import ClipLoader
 import AOS from "aos"; // Import AOS
 import "aos/dist/aos.css"; // Import AOS CSS
+import { CartContext } from "../../Context/CartContextProvider";
 
-function Allproducts() {
+function Products() {
+  const {} = useContext(CartContext);
   const { ads, brands, loading, error } = useAds(); // Use the custom hook
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -198,4 +200,4 @@ function Allproducts() {
   );
 }
 
-export default Allproducts;
+export default Products;
