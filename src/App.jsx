@@ -54,7 +54,7 @@ function App() {
           }
         >
           <Route path="/" element={<UserLayout />} />
-          <Route path="allproducts" element={<Allproducts />} />
+          <Route path="products" element={<Allproducts />} />
           <Route path="itemcart" element={<ItemCart />} />
           <Route
             path="ProductDetails/:productId"

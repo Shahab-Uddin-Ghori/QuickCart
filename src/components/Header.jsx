@@ -72,7 +72,7 @@ function Header() {
               <li className="mb-4 lg:mb-0 lg:pe-2" data-twe-nav-item-ref="">
                 {/* Products */}
                 <Link
-                  to="/Allproducts"
+                  to="/products"
                   className="text-zinc-600 font-bold  transition duration-200 hover:text-zinc-950 motion-reduce:transition-none  lg:px-2"
                   href="#"
                   data-twe-nav-link-ref=""

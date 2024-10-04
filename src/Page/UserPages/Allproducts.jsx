@@ -87,7 +87,9 @@ function Allproducts() {
       >
         <button
           onClick={() => setSelectedCategory("All")}
-          className="bg-gray-200 rounded px-4 py-2 mb-2"
+          className={`${
+            selectedCategory === "All" ? "bg-sky-600 text-white" : "bg-gray-200"
+          }   rounded px-4 py-2 mb-2`}
         >
           All Categories
         </button>
@@ -95,7 +97,11 @@ function Allproducts() {
           <button
             key={index}
             onClick={() => setSelectedCategory(category)}
-            className="bg-gray-200 rounded px-4 py-2 mb-2"
+            className={`${
+              selectedCategory === category
+                ? "bg-sky-600 text-white"
+                : "bg-gray-200"
+            }  rounded px-4 py-2 mb-2`}
           >
             {category}
           </button>
