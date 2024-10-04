@@ -14,7 +14,6 @@ function Header() {
   const { cartItems } = useContext(CartContext);
 
   useEffect(() => {
-    console.log("cardContext from header ==>", cartItems);
     initTWE({ Collapse, Dropdown });
   }, []);
 

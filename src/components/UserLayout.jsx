@@ -10,7 +10,6 @@ function UserLayout() {
   const navigate = useNavigate();
   const { ads } = useAds(); // Use the custom hook
   const { profile } = useContext(UserContext);
-  console.log(profile);
 
   useEffect(() => {
     AOS.init({

@@ -1,35 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaTrash, FaPlus, FaMinus } from "react-icons/fa";
 import AOS from "aos"; // Import AOS
 import "aos/dist/aos.css"; // Import AOS styles
+import { CartContext } from "../../Context/CartContextProvider";
 
 const ItemCart = () => {
-  // Sample data for demonstration purposes
-  const initialCartItems = [
-    {
-      id: 1,
-      name: "Product 1",
-      price: 29.99,
-      quantity: 1,
-      image: "https://via.placeholder.com/100", // Sample image URL
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 49.99,
-      quantity: 2,
-      image: "https://via.placeholder.com/100",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: 19.99,
-      quantity: 3,
-      image: "https://via.placeholder.com/100",
-    },
-  ];
-
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  const { cartItems: contextCartItem } = useContext(CartContext);
+  const [cartItems, setCartItems] = useState(contextCartItem);
 
   // Initialize AOS
   useEffect(() => {
@@ -80,19 +57,19 @@ const ItemCart = () => {
             data-aos="fade-up" // AOS animation
           >
             <img
-              src={item.image}
-              alt={item.name}
+              src={item.imageUrl}
+              alt={item.title}
               className="w-24 h-24 object-cover rounded-md"
             />
             <div className="flex-1 ml-4">
               <h3 className="text-xl font-semibold text-gray-800">
-                {item.name}
+                {item.title}
               </h3>
-              <p className="text-gray-600">Price: ${item.price.toFixed(2)}</p>
+              <p className="text-gray-600">Price: Rs. {item.price}</p>
               <div className="flex items-center mt-2">
                 <button
                   onClick={() => handleDecrement(item.id)}
-                  className="px-2 py-1 bg-gray-300 rounded-md hover:bg-gray-400 transition"
+                  className="px-2 py-2 text-sm bg-red-500 text-white rounded-full hover:bg-red-600 transition shadow-md"
                 >
                   <FaMinus />
                 </button>
@@ -101,20 +78,20 @@ const ItemCart = () => {
                 </span>
                 <button
                   onClick={() => handleIncrement(item.id)}
-                  className="px-2 py-1 bg-gray-300 rounded-md hover:bg-gray-400 transition"
+                  className="px-2 py-2 text-sm bg-sky-500 text-white rounded-full hover:bg-sky-600 transition shadow-md "
                 >
                   <FaPlus />
                 </button>
                 <button
                   onClick={() => handleRemove(item.id)}
-                  className="ml-4 text-red-600 hover:text-red-800 transition"
+                  className="ml-4 text-red-500 hover:text-red-600 transition shadow-sm"
                 >
-                  <FaTrash />
+                  <FaTrash size={24} />
                 </button>
               </div>
             </div>
             <p className="text-lg font-semibold text-gray-800">
-              ${(item.price * item.quantity).toFixed(2)}
+              Rs. {item.price * item.quantity}
             </p>
           </div>
         ))
@@ -122,10 +99,12 @@ const ItemCart = () => {
       {cartItems.length > 0 && (
         <div className="mt-4 border-t pt-4">
           <h3 className="text-2xl font-semibold text-gray-800">
-            Total Price: ${calculateTotalPrice().toFixed(2)}
+            Total Price: Rs. {calculateTotalPrice()}
           </h3>
           <button
-            onClick={() => alert("Proceeding to Checkout")}
+            onClick={() => {
+              alert("Proceeding to Checkout");
+            }}
             className="mt-4 px-6 py-3 bg-sky-600 text-white font-semibold rounded-md transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50"
           >
             Proceed to Checkout

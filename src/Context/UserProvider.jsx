@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
         const userRef = doc(db, "users", currentUser.uid);
         const unsubscribeProfile = onSnapshot(userRef, (doc) => {
           if (doc.exists()) {
-            console.log("Fetched profile data:", doc.data()); // Log fetched data
+            // console.log("Fetched profile data:", doc.data()); // Log fetched data
             setProfile(doc.data()); // Update profile data in context
           } else {
             console.log("No profile found, initializing empty profile.");
@@ -71,7 +71,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  console.log("🚀 ~ UserProvider ~ profile:", profile); // Log profile data for debugging
+  // console.log("🚀 ~ UserProvider ~ profile:", profile); // Log profile data for debugging
   return (
     <UserContext.Provider value={{ user, profile, updateProfile }}>
       {children}
