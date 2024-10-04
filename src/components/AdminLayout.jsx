@@ -1,40 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../utils/firebase";
-import { toast } from "react-toast";
-import { UserContext } from "../Context/UserProvider";
-import { useAds } from "../Context/AdProvider";
-import { db } from "../utils/firebase"; // Make sure this imports your Firebase config
-import { collection, getDocs } from "firebase/firestore";
+import React, { useContext, useEffect, useState } from "react"; // Import necessary React hooks and modules
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom"; // Import routing utilities from react-router-dom
+import { signOut } from "firebase/auth"; // Import signOut method from Firebase authentication
+import { auth } from "../utils/firebase"; // Import Firebase auth object from your configuration
+import { toast } from "react-toast"; // Import toast for notifications
+import { UserContext } from "../Context/UserProvider"; // Import user context to access the user profile
+import { useAds } from "../Context/AdProvider"; // Import custom hook to access ads context
+import { db } from "../utils/firebase"; // Import Firebase Firestore database
+import { collection, getDocs } from "firebase/firestore"; // Import Firestore methods to retrieve documents
 
 function AdminLayout() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { profile } = useContext(UserContext); // Profile context
-  const { ads } = useAds(); // Ads context
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [totalProducts, setTotalProducts] = useState(0);
-  const totalOrders = 0; // Keep this fixed at 0
-  const totalRevenue = 0; // Keep this fixed at 0
+  const location = useLocation(); // Get the current route location
+  const navigate = useNavigate(); // Get the navigation function to redirect user to different routes
+  const { profile } = useContext(UserContext); // Access the user profile from UserContext
+  const { ads } = useAds(); // Access the ads from Ads context
+  const [totalUsers, setTotalUsers] = useState(0); // State to track total users, initialized to 0
+  const [totalProducts, setTotalProducts] = useState(0); // State to track total products, initialized to 0
+  const totalOrders = 0; // Keep this fixed at 0 for now (no dynamic functionality implemented yet)
+  const totalRevenue = 0; // Keep this fixed at 0 for now (no dynamic functionality implemented yet)
 
+  // Fetch total number of users from Firestore when the component mounts
   useEffect(() => {
     const fetchUserCount = async () => {
-      const usersCollection = collection(db, "users");
-      const usersSnapshot = await getDocs(usersCollection);
-      setTotalUsers(usersSnapshot.size);
+      const usersCollection = collection(db, "users"); // Reference the "users" collection in Firestore
+      const usersSnapshot = await getDocs(usersCollection); // Get all documents (users) from the collection
+      setTotalUsers(usersSnapshot.size); // Set the totalUsers state to the number of users
     };
 
-    fetchUserCount();
-  }, []);
+    fetchUserCount(); // Call the function to fetch user count
+  }, []); // Empty dependency array means this runs only on component mount
 
+  // Fetch total number of products from the ads context when the ads data changes
   useEffect(() => {
     const fetchProductCount = () => {
-      setTotalProducts(ads.length); // Use length of ads from context
+      setTotalProducts(ads.length); // Set the totalProducts state to the length of the ads array
     };
 
-    fetchProductCount();
-  }, [ads]);
+    fetchProductCount(); // Call the function to fetch product count
+  }, [ads]); // Re-run the effect whenever the ads array changes
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -45,11 +47,11 @@ function AdminLayout() {
           <button
             onClick={async () => {
               try {
-                await signOut(auth);
-                toast.success("User signed out successfully");
-                navigate("/auth/Login");
+                await signOut(auth); // Sign out the user using Firebase authentication
+                toast.success("User signed out successfully"); // Show success toast
+                navigate("/auth/Login"); // Redirect to login page
               } catch (error) {
-                toast.error(error.message);
+                toast.error(error.message); // Show error toast if sign-out fails
               }
             }}
             className="text-white bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-700"
@@ -65,6 +67,7 @@ function AdminLayout() {
         <aside className="w-full md:w-64 bg-gray-800 text-white p-6">
           <nav>
             <ul className="space-y-4">
+              {/* Navigation links, highlights the current route with a different background */}
               <li>
                 <Link
                   to="/admin"
@@ -131,7 +134,7 @@ function AdminLayout() {
 
         {/* Main Content */}
         <main className="flex-1 p-6 bg-gray-100">
-          {/* Show Dashboard content here if the current route is /admin */}
+          {/* Render dashboard content only when the current route is /admin */}
           {location.pathname === "/admin" ? (
             <div className="bg-white shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-semibold mb-4">Admin Dashboard</h2>
@@ -142,21 +145,29 @@ function AdminLayout() {
 
               {/* Statistics Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {/* Total Users */}
                 <div className="bg-blue-100 p-4 rounded-lg shadow-md text-center">
                   <h3 className="text-lg font-medium">Total Users</h3>
-                  <p className="text-xl font-bold">{totalUsers}</p>
+                  <p className="text-xl font-bold">{totalUsers}</p>{" "}
+                  {/* Display totalUsers */}
                 </div>
+                {/* Total Products */}
                 <div className="bg-green-100 p-4 rounded-lg shadow-md text-center">
                   <h3 className="text-lg font-medium">Total Products</h3>
-                  <p className="text-xl font-bold">{totalProducts}</p>
+                  <p className="text-xl font-bold">{totalProducts}</p>{" "}
+                  {/* Display totalProducts */}
                 </div>
+                {/* Total Orders (Fixed value for now) */}
                 <div className="bg-yellow-100 p-4 rounded-lg shadow-md text-center">
                   <h3 className="text-lg font-medium">Total Orders</h3>
-                  <p className="text-xl font-bold">{totalOrders}</p>
+                  <p className="text-xl font-bold">{totalOrders}</p>{" "}
+                  {/* Display totalOrders */}
                 </div>
+                {/* Total Revenue (Fixed value for now) */}
                 <div className="bg-red-100 p-4 rounded-lg shadow-md text-center">
                   <h3 className="text-lg font-medium">Total Revenue</h3>
-                  <p className="text-xl font-bold">${totalRevenue}</p>
+                  <p className="text-xl font-bold">${totalRevenue}</p>{" "}
+                  {/* Display totalRevenue */}
                 </div>
               </div>
 
@@ -182,7 +193,7 @@ function AdminLayout() {
               </div>
             </div>
           ) : (
-            <Outlet />
+            <Outlet /> // If the route is not /admin, render the nested routes using <Outlet />
           )}
         </main>
       </div>

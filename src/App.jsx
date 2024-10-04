@@ -56,10 +56,7 @@ function App() {
           <Route path="/" element={<UserLayout />} />
           <Route path="products" element={<Allproducts />} />
           <Route path="itemcart" element={<ItemCart />} />
-          <Route
-            path="ProductDetails/:productId"
-            element={<ProductDetails />}
-          />
+          <Route path="products/:productId" element={<ProductDetails />} />
           <Route path="userprofile" element={<UserProfile />} />
         </Route>
 
