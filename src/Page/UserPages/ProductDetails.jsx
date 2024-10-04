@@ -65,7 +65,7 @@ function ProductDetails() {
               <div className="w-1/2 px-2">
                 <button
                   onClick={() => toast.info("This Feature will be added soon")}
-                  className="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600"
+                  className="w-full bg-gray-200 text-gray-800  py-2 px-4 rounded-full font-bold hover:bg-gray-300 "
                 >
                   Add to Wishlist
                 </button>
@@ -73,52 +73,42 @@ function ProductDetails() {
             </div>
           </div>
           <div className="md:flex-1 px-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+            <h2 className="text-2xl font-bold text-gray-800  mb-2">
               {product.title || "Product Name"}
             </h2>
 
             <div className="flex mb-4">
               <div className="mr-4">
-                <span className="font-bold text-gray-700 dark:text-gray-300">
-                  Price:
-                </span>
-                <span className="text-gray-600 dark:text-gray-300">
+                <span className="font-bold text-gray-700 ">Price:</span>
+                <span className="text-gray-600 ">
                   &nbsp; Rs. {product.price || "0"}
                 </span>
               </div>
               <div>
-                <span className="font-bold text-gray-700 dark:text-gray-300">
-                  Availability:
-                </span>
-                <span className="text-gray-600 dark:text-gray-300">
+                <span className="font-bold text-gray-700 ">Availability:</span>
+                <span className="text-gray-600 ">
                   {product.stock > 0 ? "In Stock" : "Out of Stock"}
                 </span>
               </div>
             </div>
             {/*  */}
             <div className="mr-4">
-              <span className="font-bold text-gray-700 dark:text-gray-300">
-                Category:
-              </span>
-              <span className="text-gray-600 dark:text-gray-300">
+              <span className="font-bold text-gray-700 ">Category:</span>
+              <span className="text-gray-600 ">
                 &nbsp; {product.category || "0"}
               </span>
             </div>
             {/*  */}
             {/*  */}
             <div className="mr-4 my-2">
-              <span className="font-bold text-gray-700 dark:text-gray-300">
-                Brand:
-              </span>
-              <span className="text-gray-600 dark:text-gray-300">
+              <span className="font-bold text-gray-700 ">Brand:</span>
+              <span className="text-gray-600 ">
                 &nbsp; {product.brand || "0"}
               </span>
             </div>
             {/*  */}
             <div className="mb-4">
-              <span className="font-bold text-gray-700 dark:text-gray-300">
-                Select Color:
-              </span>
+              <span className="font-bold text-gray-700 ">Select Color:</span>
               <div className="flex items-center mt-2">
                 {product.colors?.map((color, index) => (
                   <button
@@ -130,14 +120,12 @@ function ProductDetails() {
               </div>
             </div>
             <div className="mb-4">
-              <span className="font-bold text-gray-700 dark:text-gray-300">
-                Select Size:
-              </span>
+              <span className="font-bold text-gray-700 ">Select Size:</span>
               <div className="flex items-center mt-2">
                 {product.sizes?.map((size, index) => (
                   <button
                     key={index}
-                    className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600"
+                    className="bg-gray-300 dark:bg-gray-700 text-gray-700  py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600"
                   >
                     {size}
                   </button>
@@ -145,10 +133,10 @@ function ProductDetails() {
               </div>
             </div>
             <div>
-              <span className="font-bold text-gray-700 dark:text-gray-300">
+              <span className="font-bold text-gray-700 ">
                 Product Description:
               </span>
-              <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
+              <p className="text-gray-600  text-sm mt-2">
                 {product.description ||
                   "Detailed product description goes here."}
               </p>
