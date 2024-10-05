@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 // Create the CartContext to provide cart functionality throughout the application
 export const CartContext = createContext();
@@ -57,10 +57,19 @@ function CartContextProvider({ children }) {
       return cartItems[itemIndex]; // Return the item object
     }
   }
+  function emptyCart() {
+    setCartItems([]);
+  }
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addItemToCart, removeItemFromCart, isItemAdded }}
+      value={{
+        cartItems,
+        addItemToCart,
+        removeItemFromCart,
+        isItemAdded,
+        emptyCart,
+      }}
     >
       {children}
     </CartContext.Provider>

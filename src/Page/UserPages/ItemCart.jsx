@@ -3,10 +3,31 @@ import { FaTrash, FaPlus, FaMinus } from "react-icons/fa";
 import AOS from "aos"; // Import AOS
 import "aos/dist/aos.css"; // Import AOS styles
 import { CartContext } from "../../Context/CartContextProvider";
+import { useNavigate } from "react-router-dom";
 
 const ItemCart = () => {
-  const { cartItems: contextCartItem } = useContext(CartContext);
+  const navigate = useNavigate();
+  const { cartItems: contextCartItem, emptyCart } = useContext(CartContext);
   const [cartItems, setCartItems] = useState(contextCartItem);
+  const orderObj = [];
+
+  useEffect(() => {
+    cartItems.map((item) => {
+      const obj = {
+        id: item.id,
+        title: item.title,
+        brand: item.brand,
+        singleItemPrice: item.price,
+        quantity: item.quantity,
+        quantityItemPrice: item.price * item.quantity,
+        grandTotal: calculateTotalPrice(),
+      };
+      // console.log(obj, "from context");
+      orderObj.push(obj);
+      return item;
+    });
+  }, [cartItems]);
+  console.log("order obj ==>", orderObj);
 
   // Initialize AOS
   useEffect(() => {
@@ -103,7 +124,9 @@ const ItemCart = () => {
           </h3>
           <button
             onClick={() => {
-              alert("Proceeding to Checkout");
+              emptyCart();
+              setCartItems([]);
+              navigate("/products/:productId/checkout");
             }}
             className="mt-4 px-6 py-3 bg-sky-600 text-white font-semibold rounded-md transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50"
           >

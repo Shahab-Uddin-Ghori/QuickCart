@@ -24,6 +24,7 @@ import AdminLayout from "./components/AdminLayout";
 import { UserContext } from "./Context/UserProvider";
 import ProductDetails from "./Page/UserPages/ProductDetails";
 import Products from "./Page/UserPages/Products";
+import CheckOut from "./Page/UserPages/CheckOut";
 
 function App() {
   const { profile } = useContext(UserContext);
@@ -58,6 +59,7 @@ function App() {
           <Route path="itemcart" element={<ItemCart />} />
           <Route path="products/:productId" element={<ProductDetails />} />
           <Route path="userprofile" element={<UserProfile />} />
+          <Route path="products/:productId/checkout" element={<CheckOut />} />
         </Route>
 
         {/* Admin Pages */}
