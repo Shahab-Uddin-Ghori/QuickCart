@@ -58,8 +58,8 @@ function App() {
           <Route path="products" element={<Products />} />
           <Route path="itemcart" element={<ItemCart />} />
           <Route path="products/:productId" element={<ProductDetails />} />
+          <Route path="products/checkout" element={<CheckOut />} />
           <Route path="userprofile" element={<UserProfile />} />
-          <Route path="products/:productId/checkout" element={<CheckOut />} />
         </Route>
 
         {/* Admin Pages */}

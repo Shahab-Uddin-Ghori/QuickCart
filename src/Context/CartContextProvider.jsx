@@ -6,7 +6,53 @@ export const CartContext = createContext();
 function CartContextProvider({ children }) {
   // State to store cart items
   const [cartItems, setCartItems] = useState([]);
+  const orderObj = [];
 
+  useEffect(() => {
+    const cartObj = cartItems.map((item) => {
+      return {
+        id: item.id,
+        title: item.title,
+        brand: item.brand,
+        singleItemPrice: item.price,
+        quantity: item.quantity,
+        quantityItemPrice: item.price * item.quantity,
+        grandTotal: calculateTotalPrice(),
+      };
+      // console.log(obj, "from context");
+    });
+    orderObj.push(cartObj);
+  }, [cartItems]);
+  console.log("order obj from context ==>", orderObj);
+
+  const handleIncrement = (id) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  const handleDecrement = (id) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
+  const handleRemove = (id) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
+  const calculateTotalPrice = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
   // Function to add an item to the cart
   function addItemToCart(item) {
     // Create a copy of the current cart items
@@ -68,6 +114,12 @@ function CartContextProvider({ children }) {
         addItemToCart,
         removeItemFromCart,
         isItemAdded,
+        emptyCart,
+        handleDecrement,
+        handleIncrement,
+        handleRemove,
+        calculateTotalPrice,
+        orderObj,
         emptyCart,
       }}
     >

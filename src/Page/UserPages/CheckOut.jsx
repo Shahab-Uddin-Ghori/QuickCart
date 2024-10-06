@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { CartContext } from "../../Context/CartContextProvider";
+import { db } from "../../utils/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 const CheckOut = () => {
   const [name, setName] = useState("");
@@ -9,6 +12,9 @@ const CheckOut = () => {
   const [deliveryType, setDeliveryType] = useState("Normal");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [screenshot, setScreenshot] = useState(null);
+
+  const { orderObj, emptyCart } = useContext(CartContext);
+  console.log("from checkout to check orders ==>", orderObj);
 
   const handleScreenshotUpload = (e) => {
     setScreenshot(URL.createObjectURL(e.target.files[0]));
@@ -25,6 +31,38 @@ const CheckOut = () => {
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
+
+  const generateTransactionId = () => {
+    return "TXN-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+  };
+
+  const handleOrderSubmit = async () => {
+    try {
+      const transactionId = generateTransactionId(); // Generate a custom transaction ID
+      const ordersCollection = collection(db, "orders"); // Reference to the "orders" collection
+
+      // Transform orderObj into a suitable format
+      const items = {};
+      orderObj.forEach((item, index) => {
+        items[`item${index}`] = item; // Use unique keys for each item
+      });
+
+      const orderData = {
+        transactionId, // Include the generated transaction ID
+        items, // Use the transformed items
+        timestamp: new Date(), // Add a timestamp
+      };
+
+      const docRef = await addDoc(ordersCollection, orderData); // Add the cart items to the collection
+      console.log(
+        "Cart items saved with custom transaction ID: ",
+        transactionId
+      );
+      alert(`Your order has been placed! Transaction ID: ${transactionId}`);
+    } catch (error) {
+      console.log("Error saving cart items: ", error.message);
+    }
+  };
 
   return (
     <div
@@ -145,7 +183,11 @@ const CheckOut = () => {
 
       {/* Submit Button */}
       <button
-        onClick={() => alert("Order Submitted!")}
+        onClick={() => {
+          alert("Order Submitted!");
+          handleOrderSubmit();
+          emptyCart();
+        }}
         className="mt-6 w-full px-6 py-3 bg-sky-600 text-white font-semibold rounded-md shadow-lg hover:bg-sky-700 transition focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50"
       >
         Submit Order

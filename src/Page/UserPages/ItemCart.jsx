@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { FaTrash, FaPlus, FaMinus } from "react-icons/fa";
 import AOS from "aos"; // Import AOS
 import "aos/dist/aos.css"; // Import AOS styles
@@ -7,61 +7,18 @@ import { useNavigate } from "react-router-dom";
 
 const ItemCart = () => {
   const navigate = useNavigate();
-  const { cartItems: contextCartItem, emptyCart } = useContext(CartContext);
-  const [cartItems, setCartItems] = useState(contextCartItem);
-  const orderObj = [];
-
-  useEffect(() => {
-    cartItems.map((item) => {
-      const obj = {
-        id: item.id,
-        title: item.title,
-        brand: item.brand,
-        singleItemPrice: item.price,
-        quantity: item.quantity,
-        quantityItemPrice: item.price * item.quantity,
-        grandTotal: calculateTotalPrice(),
-      };
-      // console.log(obj, "from context");
-      orderObj.push(obj);
-      return item;
-    });
-  }, [cartItems]);
-  console.log("order obj ==>", orderObj);
+  const {
+    cartItems,
+    handleDecrement,
+    handleIncrement,
+    handleRemove,
+    calculateTotalPrice,
+  } = useContext(CartContext);
 
   // Initialize AOS
   useEffect(() => {
     AOS.init({ duration: 500 }); // Optional: Set duration for animations
   }, []);
-
-  const handleIncrement = (id) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
-
-  const handleDecrement = (id) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
-  };
-
-  const handleRemove = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
-
-  const calculateTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-  };
 
   return (
     <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -123,11 +80,7 @@ const ItemCart = () => {
             Total Price: Rs. {calculateTotalPrice()}
           </h3>
           <button
-            onClick={() => {
-              emptyCart();
-              setCartItems([]);
-              navigate("/products/:productId/checkout");
-            }}
+            onClick={() => navigate("/products/checkout")}
             className="mt-4 px-6 py-3 bg-sky-600 text-white font-semibold rounded-md transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50"
           >
             Proceed to Checkout
