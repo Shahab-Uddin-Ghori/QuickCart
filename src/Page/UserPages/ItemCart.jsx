@@ -4,8 +4,12 @@ import AOS from "aos"; // Import AOS
 import "aos/dist/aos.css"; // Import AOS styles
 import { CartContext } from "../../Context/CartContextProvider";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../Context/UserProvider";
+import { toast } from "react-toast";
 
 const ItemCart = () => {
+  const { user } = useContext(UserContext);
+
   const navigate = useNavigate();
   const {
     cartItems,
@@ -19,6 +23,17 @@ const ItemCart = () => {
   useEffect(() => {
     AOS.init({ duration: 500 }); // Optional: Set duration for animations
   }, []);
+
+  useEffect(() => {
+    try {
+      if (!user) {
+        navigate("/auth/login");
+        toast.success("You need to login first");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [user]);
 
   return (
     <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">

@@ -120,7 +120,6 @@ function CartContextProvider({ children }) {
         handleRemove,
         calculateTotalPrice,
         orderObj,
-        emptyCart,
       }}
     >
       {children}

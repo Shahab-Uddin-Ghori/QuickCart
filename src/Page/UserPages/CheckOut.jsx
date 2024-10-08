@@ -64,6 +64,13 @@ const CheckOut = () => {
     }
   };
 
+  const handleOrderShipment = () => {
+    try {
+    } catch (error) {
+      console.log("🚀 ~ handleOrderShipment ~ error:", error.message);
+    }
+  };
+
   return (
     <div
       className="container mx-auto mt-24 h-screen p-6 bg-white shadow-lg rounded-lg"
@@ -107,13 +114,19 @@ const CheckOut = () => {
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Address <span className="text-red-500">*</span>
         </label>
-        <input
+        {/* <input
           type="text"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-sky-500"
           required
-        />
+        /> */}
+        <textarea
+          name="adress"
+          id="adress"
+          onChange={(e) => setAddress(e.target.value)}
+          className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-sky-500"
+        ></textarea>
       </div>
 
       {/* Delivery Type */}
@@ -127,8 +140,8 @@ const CheckOut = () => {
           className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-sky-500"
         >
           <option value="Normal">Normal</option>
-          <option value="Fast">Fast</option>
-          <option value="Fastest">Fastest</option>
+          <option value="express">Express Delivery</option>
+          <option value="sameday">Same-Day Delivery</option>
         </select>
       </div>
 

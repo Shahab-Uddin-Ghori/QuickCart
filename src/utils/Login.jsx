@@ -4,7 +4,7 @@ import { UserContext } from "../Context/UserProvider"; // Import UserContext
 import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase auth function
 import { auth } from "../utils/firebase"; // Import Firebase auth instance
 import { toast } from "react-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Login() {
   const [introVisible, setIntroVisible] = useState(false);
@@ -201,9 +201,12 @@ function Login() {
             {/* Sign Up Link */}
             <div className="mt-6 text-center">
               <span className="text-gray-600">Don't have an account? </span>
-              <a href="#" className="text-blue-600 hover:underline">
+              <Link
+                to={`/auth/signup`}
+                className="text-blue-600 hover:underline"
+              >
                 Sign up
-              </a>
+              </Link>
             </div>
           </div>
         </div>
