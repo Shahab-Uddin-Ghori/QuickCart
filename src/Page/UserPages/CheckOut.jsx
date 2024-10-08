@@ -51,6 +51,11 @@ const CheckOut = () => {
         transactionId, // Include the generated transaction ID
         items, // Use the transformed items
         timestamp: new Date(), // Add a timestamp
+        name,
+        contact,
+        address,
+        deliveryType,
+        paymentMethod,
       };
 
       const docRef = await addDoc(ordersCollection, orderData); // Add the cart items to the collection
@@ -61,13 +66,6 @@ const CheckOut = () => {
       alert(`Your order has been placed! Transaction ID: ${transactionId}`);
     } catch (error) {
       console.log("Error saving cart items: ", error.message);
-    }
-  };
-
-  const handleOrderShipment = () => {
-    try {
-    } catch (error) {
-      console.log("🚀 ~ handleOrderShipment ~ error:", error.message);
     }
   };
 
