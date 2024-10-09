@@ -2,22 +2,42 @@ import React, { useState, useEffect, useContext } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { CartContext } from "../../Context/CartContextProvider";
-import { db } from "../../utils/firebase";
+import { db, storage } from "../../utils/firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../Context/UserProvider";
 
 const CheckOut = () => {
-  const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
-  const [address, setAddress] = useState("");
+  const { profile } = useContext(UserContext);
+  console.log("profile from checkout", profile);
+
+  const [name, setName] = useState(profile?.name || "");
+  const [contact, setContact] = useState(profile?.contact || "");
+  const [address, setAddress] = useState(profile?.location || "");
+  const [zipcode, setZipcode] = useState(profile?.zipcode || "");
+  const [email, setEmail] = useState(profile?.email || "");
   const [deliveryType, setDeliveryType] = useState("Normal");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [screenshot, setScreenshot] = useState(null);
+  const navigate = useNavigate();
 
   const { orderObj, emptyCart } = useContext(CartContext);
   console.log("from checkout to check orders ==>", orderObj);
 
-  const handleScreenshotUpload = (e) => {
-    setScreenshot(URL.createObjectURL(e.target.files[0]));
+  const handleScreenshotUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const storageRef = ref(storage, `screenshots/${file.name}`);
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+      setScreenshot(downloadURL);
+      console.log("Screenshot uploaded and URL obtained:", downloadURL);
+    } catch (error) {
+      console.error("Error uploading screenshot:", error.message);
+    }
   };
 
   const handleContactChange = (e) => {
@@ -52,10 +72,13 @@ const CheckOut = () => {
         items, // Use the transformed items
         timestamp: new Date(), // Add a timestamp
         name,
+        zipcode,
         contact,
         address,
+        email, // Include email in order data
         deliveryType,
         paymentMethod,
+        screenshot,
       };
 
       const docRef = await addDoc(ordersCollection, orderData); // Add the cart items to the collection
@@ -107,24 +130,45 @@ const CheckOut = () => {
         />
       </div>
 
+      {/* Email Input */}
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Email <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="email"
+          value={email}
+          className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-sky-500"
+          required
+          disabled
+        />
+      </div>
+
       {/* Address Input */}
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Address <span className="text-red-500">*</span>
         </label>
-        {/* <input
-          type="text"
+        <textarea
+          name="address"
+          id="address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-sky-500"
-          required
-        /> */}
-        <textarea
-          name="adress"
-          id="adress"
-          onChange={(e) => setAddress(e.target.value)}
-          className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-sky-500"
         ></textarea>
+      </div>
+
+      {/* Zipcode */}
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Zip Code <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          value={zipcode}
+          onChange={(e) => setZipcode(e.target.value)}
+          className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-sky-500"
+        />
       </div>
 
       {/* Delivery Type */}
@@ -138,8 +182,8 @@ const CheckOut = () => {
           className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-sky-500"
         >
           <option value="Normal">Normal</option>
-          <option value="express">Express Delivery</option>
-          <option value="sameday">Same-Day Delivery</option>
+          <option value="Express">Express Delivery</option>
+          <option value="SameDay">Same-Day Delivery</option>
         </select>
       </div>
 
@@ -195,11 +239,11 @@ const CheckOut = () => {
       {/* Submit Button */}
       <button
         onClick={() => {
-          alert("Order Submitted!");
           handleOrderSubmit();
-          emptyCart();
+          emptyCart(); // Clear the cart after order submission
+          navigate("/products"); // Redirect to the products page
         }}
-        className="mt-6 w-full px-6 py-3 bg-sky-600 text-white font-semibold rounded-md shadow-lg hover:bg-sky-700 transition focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Submit Order
       </button>

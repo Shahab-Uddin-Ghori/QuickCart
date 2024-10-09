@@ -8,14 +8,9 @@ import { useNavigate } from "react-router-dom";
 const Profile = () => {
   const { user, updateProfile } = useUser();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
-  }, [user]);
+
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     contact: "",
     location: "",
     city: "",
@@ -27,24 +22,30 @@ const Profile = () => {
   const [imageUrl, setImageUrl] = useState("https://via.placeholder.com/150"); // Default image
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      if (!user) return;
+    if (!user) {
+      navigate("/");
+    } else {
+      // Fetch profile data if user is available
+      const fetchProfileData = async () => {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
 
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const profileData = userDoc.data();
+          setFormData({
+            ...profileData,
+          });
+          setImageUrl(
+            profileData.profilePicture || "https://via.placeholder.com/150"
+          );
+        } else {
+          console.log("No such document!");
+        }
+      };
 
-      if (userDoc.exists()) {
-        const profileData = userDoc.data();
-        setFormData(profileData);
-        setImageUrl(
-          profileData.profilePicture || "https://via.placeholder.com/150"
-        );
-      } else {
-        console.log("No such document!");
-      }
-    };
-    fetchProfileData();
-  }, [user]);
+      fetchProfileData();
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -76,6 +77,7 @@ const Profile = () => {
 
     const updatedData = {
       ...formData,
+      email: user?.email || "", // Make sure email is set if available
       profilePicture: uploadedImageUrl,
     };
 
@@ -136,9 +138,7 @@ const Profile = () => {
               type="email"
               name="email"
               id="email"
-              value={formData.email || ""}
-              onChange={handleChange}
-              placeholder="Enter your email"
+              value={user?.email || ""}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
               disabled
             />
