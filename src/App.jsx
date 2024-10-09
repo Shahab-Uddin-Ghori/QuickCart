@@ -25,6 +25,8 @@ import { UserContext } from "./Context/UserProvider";
 import ProductDetails from "./Page/UserPages/ProductDetails";
 import Products from "./Page/UserPages/Products";
 import CheckOut from "./Page/UserPages/CheckOut";
+import Features from "./Page/UserPages/Features";
+import AboutUs from "./Page/UserPages/AboutUs";
 
 function App() {
   const { profile } = useContext(UserContext);
@@ -60,6 +62,8 @@ function App() {
           <Route path="products/:productId" element={<ProductDetails />} />
           <Route path="products/checkout" element={<CheckOut />} />
           <Route path="userprofile" element={<UserProfile />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/aboutus" element={<AboutUs />} />
         </Route>
 
         {/* Admin Pages */}
